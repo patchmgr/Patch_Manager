@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dynamically Created Button Example</title>
+	<!-- Add your CSS and JS files here -->
+	<link rel="stylesheet" href="style.css">
+	<script src="script.js"></script>
+</head>
+<body>
+	<div id="container">
+		<!-- Add your dynamically created button here -->
+	</div>
+
+	<!-- Add your modal here -->
+	<div id="myModal" class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<p>This is a modal!</p>
+		</div>
+	</div>
+
+	<script>
+		// Get the container element where the button will be added
+		var container = document.getElementById("container");
+
+		// Create the button element
+		var button = document.createElement("button");
+		button.innerHTML = "Open Modal";
+
+		// Add the onclick event to the button
+		button.onclick = function() {
+			// Get the modal element
+			var modal = document.getElementById("myModal");
+
+			// Get the close button element
+			var closeButton = modal.querySelector(".close");
+
+			// When the user clicks on the close button, close the modal
+			closeButton.onclick = function() {
+				modal.style.display = "none";
+			}
+
+			// Show the modal
+			modal.style.display = "block";
+		}
+
+		// Add the button to the container
+		container.appendChild(button);
+	</script>
+</body>
+</html>

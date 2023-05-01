@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<script src="dev.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js"
+		integrity="sha256-nWBTbvxhJgjslRyuAKJHK+XcZPlCnmIAAMixz6EefVk=" crossorigin="anonymous"></script>
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+	<!-- FilePond stylesheet -->
+<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" />
+
+<!-- FilePond JavaScript -->
+<script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+
+
+
+	<title>Patch-register</title>
+</head>
+
+
+<body onload="connectMetamask();connectContract()">
+
+	<body>
+
+		<!-- nav bar -->
+		<nav class="navbar navbar-expand-lg  fixed-top navbar-light " id="mainNav" style="background-color: aquamarine;"> 
+			<div class="container-fluid">
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+					aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span
+						class="navbar-toggler-icon"></span></button>
+				<div class="collapse navbar-collapse" id="navbarResponsive">
+					<ul class="nav nav-pills me-auto mb-2 mb-lg-0 w-100" id="pills-tab" role="tablist">
+						<li class="nav-item" role="presentation">
+							<button class="nav-link " id="pills-profile-tab" data-bs-toggle="pill"
+								data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile"
+								aria-selected="false" onclick="window.open('userdownload.html','_self');">End User</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link " id="pills-contact-tab" data-bs-toggle="pill"
+								data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact"
+								aria-selected="false" onclick="window.open('labeller.html','_self');">Labeller</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link " id="pills-home-tab" data-bs-toggle="pill"
+								data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+								aria-selected="true" onclick="window.open('patchdetails.html','_self');">Admin</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link active" id="pills-contact-tab" data-bs-toggle="pill"
+								data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact"
+								aria-selected="false" onclick="window.open('devrequest.html','_self');">Developer</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link " id="pills-contact-tab" data-bs-toggle="pill"
+								data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact"
+								aria-selected="false" onclick="window.open('patchverify.html','_self');">Verifier (qc)</button>
+						</li>
+					</ul>
+	
+				</div>
+			</div>
+		</nav>
+		<br><br><br><br><br>
+
+		<!-- dashboard -->
+		<div class="container  d-flex  align-items-center "
+			style="background-color:rgba(242, 124, 70, 0.289); min-height: 80px; height: auto; ">
+			<ul class="nav nav-pills flex-grow-1 me-auto mb-3 mb-lg-0 d-flex justify-content-evenly " id="pills-tab"
+				role="tablist">
+				<li class="nav-item" role="presentation">
+					<button class="nav-link active" id="pills-contact-tab" data-bs-toggle="pill"
+						data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact"
+						aria-selected="false">Patch requests</button>
+				</li>
+				<!-- <li class="nav-item" role="presentation">
+					<button class="nav-link active" id="pills-profile-tab" data-bs-toggle="pill"
+						data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile"
+						aria-selected="false" onclick="window.open('patchregister.html','_self');">Register
+						patch</button>
+				</li> -->
+			</ul>
+		</div>
+		<br>
+		<button id="hello" class="btn btn-danger" onclick="createCard()">Upload</button>
+		<br><br>
+		<br><br><br>
+		<div id="cardContainer" class="container my-2"></div>
+
+		<!-- Modal -->
+		<div class="modal" id="myModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+
+					<!-- Modal header -->
+					<div class="modal-header">
+						<h4 class="modal-title">Upload Patch</h4>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+
+					<!-- Modal body -->
+					<div class="modal-body">
+						<h5>enter patch name</h3>
+							<input type="text" id="pname" class="form-control">
+							<h5>patch description</h3>
+							<input  type="text" class="form-control"  id="desc" readonly></input>
+							<h5>Software</h3>
+							<input  type="text" class="form-control"  id="psft" readonly></input>
+							<h5>patch features</h3>
+							<input  type="text" class="form-control"  id="ftres" readonly></input>
+							<h5>patch no</h3>
+							<p id="totno">1</p>
+							<button class="btn btn-bd-primary float-end"
+							onclick="devrequest()">Register</button>
+							<input type="file" id="patchfile">
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div id="cred" class="container ">
+
+		</div>
+
+
+		<script>
+			function createCard() {
+				// Define card content variables
+				var requestID = "[insert ID]";
+				let tot = 0;
+
+				let fbugsPromises = [];
+
+
+				window.contract.methods.ftotal().call().then((result) => {
+					tot = result
+					console.log(tot)
+
+					for (let i = 0; i < result-1; i++) {
+						var features = "[insert features here]";
+						let tope;
+						var v = window.contract.methods.fall(i).call().then((result1) => {
+							//  tope=result;
+							console.log(result1);
+							console.log("hello world")
+							var par = "[insert software here]"
+							var downloadURL = "#";
+							var card = document.createElement('div');
+							card.classList.add('card');
+
+							var cardHeader = document.createElement('div');
+							cardHeader.classList.add('card-header');
+
+							var cardTitle = document.createElement('h2');
+							cardTitle.innerText = "Request ID: " + (i + 1);
+
+							var cardBody = document.createElement('div');
+							cardBody.classList.add('card-body');
+
+							var patchTitle = document.createElement('h3');
+							patchTitle.classList.add('card-title');
+							patchTitle.innerText = "Patch Details:";
+
+							var patchDetailsText = document.createElement('p');
+							patchDetailsText.classList.add('card-text');
+							patchDetailsText.innerText = result1.dbugs;
+
+							var ppp = document.getElementById("desc");
+							ppp.textContent = result1.dbugs
+
+							var pa = document.createElement('h3');
+							pa.classList.add('card-title');
+							pa.innerText = "Software:";
+
+							var pat1 = document.createElement('p');
+							pat1.classList.add('card-text');
+							pat1.innerText = result1.dsoftware;
+
+							var featuresTitle = document.createElement('h3');
+							featuresTitle.classList.add('card-title');
+							featuresTitle.innerText = "Features:";
+
+							var featuresText = document.createElement('p');
+							featuresText.classList.add('card-text');
+							featuresText.innerText = result1.dfeatures;
+
+							var downloadBtn = document.createElement('a');
+							downloadBtn.classList.add('btn', 'btn-primary');
+							downloadBtn.href = downloadURL;
+							downloadBtn.innerText = "Get details";
+
+							var uploadBtn = document.createElement('button');
+							uploadBtn.setAttribute("id", "hello");
+							uploadBtn.setAttribute("data-bs-toggle", "modal");
+							uploadBtn.setAttribute("data-bs-target", "#myModal");
+							// data-bs-toggle="modal" data-bs-target="#exampleModal"
+
+							uploadBtn.classList.add('btn', 'btn-success', 'float-end');
+							uploadBtn.innerText = "Upload";
+
+
+
+							uploadBtn.onclick = function () {
+								// Get the patch details from the card
+								const patchDetails = patchDetailsText.innerText;
+								const software = pat1.innerText;
+								const features = featuresText.innerText;
+
+								// Populate the modal with the patch details
+								document.getElementById("desc").value = patchDetails;
+								document.getElementById("psft").value = software;
+								document.getElementById("ftres").value = features;
+							}
+							breaker=document.createElement("br")
+
+
+							// Append elements to card and card body
+							cardHeader.appendChild(cardTitle);
+
+							cardBody.appendChild(patchTitle);
+							cardBody.appendChild(patchDetailsText);
+							cardBody.appendChild(pa);
+							cardBody.appendChild(pat1);
+							cardBody.appendChild(featuresTitle);
+							cardBody.appendChild(featuresText);
+							cardBody.appendChild(downloadBtn);
+							cardBody.appendChild(uploadBtn);
+
+							card.appendChild(cardHeader);
+							card.appendChild(cardBody);
+
+
+
+							const cred = document.getElementById("cred")
+							cred.appendChild(card);
+							cred.appendChild(breaker);
+						})
+					}
+
+				});
+
+
+			}
+
+
+
+
+			
+		</script>
+
+	</body>
+
+
+</html>

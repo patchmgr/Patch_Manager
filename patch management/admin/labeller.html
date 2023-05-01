@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com//ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js"
+        integrity="sha256-nWBTbvxhJgjslRyuAKJHK+XcZPlCnmIAAMixz6EefVk=" crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <title>Patch-register</title>
+</head>
+
+
+<body onload="connectMetamask();connectContract()">
+    <!-- <body> -->
+
+    <!-- nav bar -->
+    <nav class="navbar navbar-expand-lg  fixed-top navbar-light " id="mainNav" style="background-color: aquamarine;"> 
+		<div class="container-fluid">
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+				aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span
+					class="navbar-toggler-icon"></span></button>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="nav nav-pills me-auto mb-2 mb-lg-0 w-100" id="pills-tab" role="tablist">
+					<li class="nav-item" role="presentation">
+						<button class="nav-link " id="pills-profile-tab" data-bs-toggle="pill"
+							data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile"
+							aria-selected="false" onclick="window.open('userdownload.html','_self');">End User</button>
+					</li>
+					<li class="nav-item" role="presentation">
+						<button class="nav-link active" id="pills-contact-tab" data-bs-toggle="pill"
+							data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact"
+							aria-selected="false" onclick="window.open('labeller.html','_self');">Labeller</button>
+					</li>
+					<li class="nav-item" role="presentation">
+						<button class="nav-link " id="pills-home-tab" data-bs-toggle="pill"
+							data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+							aria-selected="true" onclick="window.open('patchdetails.html','_self');">Admin</button>
+					</li>
+					<li class="nav-item" role="presentation">
+						<button class="nav-link " id="pills-contact-tab" data-bs-toggle="pill"
+							data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact"
+							aria-selected="false" onclick="window.open('devrequest.html','_self');">Developer</button>
+					</li>
+					<li class="nav-item" role="presentation">
+						<button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill"
+							data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact"
+							aria-selected="false" onclick="window.open('patchverify.html','_self');">Verifier (qc)</button>
+					</li>
+				</ul>
+
+			</div>
+		</div>
+	</nav>
+    <br><br><br><br><br>
+
+    <!-- dashboard -->
+    <div class="container  d-flex  align-items-center "
+        style="background-color:rgba(242, 124, 70, 0.289); min-height: 80px; height: auto; ">
+        <ul class="nav nav-pills flex-grow-1 me-auto mb-3 mb-lg-0 d-flex justify-content-evenly " id="pills-tab"
+            role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active " id="pills-profile-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile"
+                    aria-selected="false" onclick="window.open('Labeller.html','_self');">Set the Prioirity</button>
+            </li>
+        </ul>
+    </div>
+    <br>
+    <div class="col-4 p-2">
+        <select id="softer" class="form-select" aria-label="Default select example" onchange="getdata()">
+            <option selected>software</option>
+            <option value="software1">software1</option>
+            <option value="software2">software2</option>
+            <option value="software3">software3</option>
+            <option value="software4">software4</option>
+            <option value="software5">software5</option>
+        </select>
+    </div>
+    <div class="container text-center d-flex justify-content-around p-5" id="hero">
+        <table class="table table-striped table-hover" id="MyTable">
+            <thead>
+                <tr>
+                    <th>Bugs Name</th>
+                    <th>Selected value</th>
+                    <th>Label status</th>
+                </tr>
+            </thead>
+        </table>
+        <table class="table table-striped table-hover" id="MyTable1">
+            <thead>
+                <tr>
+                    <th>feature Name</th>
+                    <th>Selected value</th>
+                    <th>Label status</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="container text-center p-5">
+        <input type="submit" value="submitvalue" class="btn btn-primary" onclick="sendtoadmin()">
+    </div>
+
+
+    <script src="addlabel.js"></script>
+    <script>
+        const getdata = async () => {
+            const diver = document.getElementById("hero");
+            const t = document.getElementById("softer").value;
+            const result = await window.contract.methods.getbugs(t).call();
+            const resulter = await contract.methods.obtfeatures(t).call();
+            const b_arr = [];
+            const bp_arr = [];
+            for (let i = 0; i < result.length; i++) {
+                for (let j = 0; j < result[i].length; j++) {
+                    const a = await window.contract.methods.getbp(t,result[i][j]).call();
+                    b_arr.push(result[i][j]);
+                    bp_arr.push(a);
+                }
+            }
+            const f_arr = [];
+            const fp_arr = [];
+            for (let i = 0; i < resulter.length; i++) {
+                for (let j = 0; j < resulter[i].length; j++) {
+                    const a = await window.contract.methods.getfp(t,resulter[i][j]).call();
+                    f_arr.push(resulter[i][j]);
+                    fp_arr.push(a);
+
+                }
+            }
+
+            // console.log(f_arr);
+            // console.log(fp_arr);
+            
+            // bug table
+            const table = document.getElementById("MyTable");
+            $('#MyTable').DataTable(); // initialize the DataTable plugin
+            const tabl = $('#MyTable').DataTable();
+            const tbody = table.querySelector("tbody");
+            if (tbody) {
+                tbody.remove();
+            }
+            tabl.destroy();
+
+            // feature table
+            const table1 = document.getElementById("MyTable1");
+            $(table1).DataTable().destroy();
+            $('#MyTable1').DataTable(); // initialize the DataTable plugin
+            const tabl1 = $('#MyTable1').DataTable();
+            const tbody1 = table1.querySelector("tbody");
+            if (tbody1) {
+                tbody1.remove();
+            }
+            tabl1.destroy();
+
+
+
+
+
+
+            // bug table
+            const body = document.createElement("tbody");
+
+            for (let i = 0; i < b_arr.length; i++) {
+                const row = document.createElement("tr");
+                const cell1 = document.createElement("td");
+                cell1.textContent = b_arr[i];
+
+                const cell2 = document.createElement("td");
+
+                
+                if(bp_arr[i]=='0'){
+                    const select = document.createElement("select");
+                    select.classList.add("form-control");
+    
+                    for (let j = 0; j <= 5; j++) {
+                        const option = document.createElement("option");
+                        option.value = j;
+                        option.textContent = j;
+                        select.appendChild(option);
+                    }
+                    cell2.appendChild(select);
+                }
+                else{
+                    const input=document.createElement("p");
+                    input.innerHTML=bp_arr[i];
+                    cell2.appendChild(input);
+                }
+                const cell3 = document.createElement("td");
+                cell3.textContent = await contract.methods.bugcheck(t, cell1.textContent).call();
+
+                row.appendChild(cell1);
+                row.appendChild(cell2);
+                row.appendChild(cell3);
+
+                body.appendChild(row);
+            }
+
+            table.appendChild(body);
+            $(table).DataTable().draw();
+
+            // feature table
+            const body1 = document.createElement("tbody");
+
+            for (let i = 0; i < f_arr.length; i++) {
+                const row1 = document.createElement("tr");
+                const cell11 = document.createElement("td");
+                cell11.textContent = f_arr[i];
+
+                const cell22 = document.createElement("td");
+
+                if(fp_arr[i]=='0'){
+                    const select1 = document.createElement("select");
+                    select1.classList.add("form-control");
+    
+                    for (let j = 0; j <= 5; j++) {
+                        const option1 = document.createElement("option");
+                        option1.value = j;
+                        option1.textContent = j;
+                        select1.appendChild(option1);
+                    }
+                    cell22.appendChild(select1);
+                }
+                else{
+                    const input=document.createElement("p");
+                    input.innerHTML=fp_arr[i];
+                    cell22.appendChild(input);
+                }
+
+                const cell33 = document.createElement("td");
+                cell33.textContent = await contract.methods.featurecheck(t, cell11.textContent).call();
+
+                row1.appendChild(cell11);
+                row1.appendChild(cell22);
+                row1.appendChild(cell33);
+
+                body1.appendChild(row1);
+            }
+
+            table1.appendChild(body1);
+            $(table1).DataTable().draw();
+
+
+            $(function () {
+                $("table").DataTable();
+            });
+
+            $(function () {
+                $("table1").DataTable();
+            });
+
+        }
+        const sendtoadmin = async () => {
+            const diver = document.getElementById("hero");
+            const t = document.getElementById("softer").value;
+            const existingModal = document.getElementById("myModal");
+
+            const modal = document.createElement("div");
+            modal.classList.add("modal", "fade");
+            modal.id = "myModal";
+
+            modal.addEventListener("hidden.bs.modal", function () {
+                modal.parentNode.removeChild(modal);
+            });
+
+
+            const modalDialog = document.createElement("div");
+            modalDialog.classList.add("modal-dialog");
+
+            const modalContent = document.createElement("div");
+            modalContent.classList.add("modal-content");
+
+            const modalHeader = document.createElement("div");
+            modalHeader.classList.add("modal-header");
+
+            const modalTitle = document.createElement("h4");
+            modalTitle.classList.add("modal-title");
+            modalTitle.textContent = "Selected Values";
+
+            const modalBody = document.createElement("div");
+            modalBody.classList.add("modal-body");
+
+            const modalFooter = document.createElement("div");
+            modalFooter.classList.add("modal-footer");
+
+            const closeButton = document.createElement("button");
+            closeButton.classList.add("btn", "btn-secondary");
+            closeButton.textContent = "Close";
+            closeButton.setAttribute("data-bs-dismiss", "modal");
+
+            const names= document.querySelectorAll("#MyTable td:first-child");
+            const names1 = document.querySelectorAll("#MyTable1 td:first-child");
+            const values = document.querySelectorAll("#MyTable td:nth-child(2)");
+            const values1 = document.querySelectorAll("#MyTable1 td:nth-child(2)");
+            let modalContentText = "<table class='table'><thead><tr><th>Name</th><th>Selected Value</th></tr></thead><tbody>";
+            let n1 = [];
+            let v1 = [];
+            for (let i = 0; i < names.length; i++) {
+                let x = await contract.methods.bugcheck(t, names[i].textContent).call();
+                if (x != "labelled") {
+                    if (values[i].querySelector("select").value != 0) {
+                        n1.push(names[i].textContent);
+                        v1.push(values[i].querySelector("select").value);
+                        let a=values[i].querySelector("select").value;
+                        modalContentText += `<tr><td>${names[i].textContent}</td><td>${values[i].querySelector("select").value}</td></tr>`;
+                    }
+                }
+            }
+            let n2 = [];
+            let v2 = [];
+            for (let i = 0; i < names1.length; i++) {
+                let x = await contract.methods.featurecheck(t, names1[i].textContent).call();
+                if (x != "labelled") {
+                    if (values1[i].querySelector("select").value != 0) {
+                        n2.push(names1[i].textContent);
+                        v2.push(values1[i].querySelector("select").value);
+                        modalContentText += `<tr><td>${names1[i].textContent}</td><td>${values1[i].querySelector("select").value}</td></tr>`;
+                    }
+                }
+            }
+            // console.log(n1)
+            // console.log(v1)
+            await window.contract.methods.buglabel(t, n1, v1,n2,v2).send({ from: account });
+            
+            
+            
+            modalContentText += "</tbody></table>";
+            
+            modalBody.innerHTML = modalContentText;
+            
+            modalHeader.appendChild(modalTitle);
+            modalFooter.appendChild(closeButton);
+            modalContent.appendChild(modalHeader);
+            modalContent.appendChild(modalBody);
+            modalContent.appendChild(modalFooter);
+            modalDialog.appendChild(modalContent);
+            modal.appendChild(modalDialog);
+            
+            
+            
+            diver.appendChild(modal);
+            
+            $("#myModal").modal("show");
+            
+
+
+
+        }
+
+
+
+
+
+        // hello
+        // const getdata = async () => {
+        //     const diver = document.getElementById("hero");
+
+        //     const table = document.getElementById("MyTable");
+        //     const body = document.createElement("tbody");
+        //     const t = document.getElementById("softer").value;
+        //     const result = await contract.methods.getbugs(t).call();
+        //     const b_arr = [];
+        //     for (let i = 0; i < result.length; i++) {
+        //         for (let j = 0; j < result[i].length; j++) {
+        //             b_arr.push(result[i][j]);
+        //         }
+        //     }
+
+
+        //     console.log(result.length);
+        //     console.log(result);
+        //     console.log(b_arr);
+        //     for (let i = 0; i < b_arr.length; i++) {
+        //         const row = document.createElement("tr");
+        //         const cell1 = document.createElement("td");
+        //         cell1.textContent = b_arr[i];
+
+        //         const cell2 = document.createElement("td");
+
+        //         const select = document.createElement("select");
+        //         select.classList.add("form-control");
+
+        //         for (let j = 0; j <= 5; j++) {
+        //             const option = document.createElement("option");
+        //             option.value = j;
+        //             option.textContent = j;
+        //             select.appendChild(option);
+        //         }
+
+        //         cell2.appendChild(select);
+
+        //         const cell3 = document.createElement("td");
+        //         cell3.textContent = await contract.methods.bugcheck(t, cell1.textContent).call();
+
+        //         row.appendChild(cell1);
+        //         row.appendChild(cell2);
+        //         row.appendChild(cell3);
+
+        //         body.appendChild(row);
+        //     }
+        //     table.appendChild(body);
+
+        //     const button = document.createElement("button");
+        //     button.classList.add("btn", "btn-primary");
+        //     button.textContent = "Submit";
+        //     button.onclick = function () {
+        //         const existingModal = document.getElementById("myModal");
+
+        //         const modal = document.createElement("div");
+        //         modal.classList.add("modal", "fade");
+        //         modal.id = "myModal";
+
+        //         // add event listener to remove modal when closed
+        //         modal.addEventListener("hidden.bs.modal", function () {
+        //             modal.parentNode.removeChild(modal);
+        //         });
+
+
+        //         const modalDialog = document.createElement("div");
+        //         modalDialog.classList.add("modal-dialog");
+
+        //         const modalContent = document.createElement("div");
+        //         modalContent.classList.add("modal-content");
+
+        //         const modalHeader = document.createElement("div");
+        //         modalHeader.classList.add("modal-header");
+
+        //         const modalTitle = document.createElement("h4");
+        //         modalTitle.classList.add("modal-title");
+        //         modalTitle.textContent = "Selected Values";
+
+        //         const modalBody = document.createElement("div");
+        //         modalBody.classList.add("modal-body");
+
+        //         const modalFooter = document.createElement("div");
+        //         modalFooter.classList.add("modal-footer");
+
+        //         const closeButton = document.createElement("button");
+        //         closeButton.classList.add("btn", "btn-secondary");
+        //         closeButton.textContent = "Close";
+        //         closeButton.setAttribute("data-bs-dismiss", "modal");
+
+        //         const names = document.querySelectorAll("td:first-child");
+        //         const values = document.querySelectorAll("td:nth-child(2)");
+
+        //         let modalContentText = "<table class='table'><thead><tr><th>Name</th><th>Selected Value</th></tr></thead><tbody>";
+
+        //         for (let i = 0; i < names.length; i++) {
+        //             modalContentText += `<tr><td>${names[i].textContent}</td><td>${values[i].querySelector("select").value}</td></tr>`;
+        //         }
+
+        //         modalContentText += "</tbody></table>";
+
+
+        //         modalContentText += "</tbody></table>";
+
+        //         modalBody.innerHTML = modalContentText;
+
+        //         modalHeader.appendChild(modalTitle);
+        //         modalFooter.appendChild(closeButton);
+        //         modalContent.appendChild(modalHeader);
+        //         modalContent.appendChild(modalBody);
+        //         modalContent.appendChild(modalFooter);
+        //         modalDialog.appendChild(modalContent);
+        //         modal.appendChild(modalDialog);
+
+
+
+        //         diver.appendChild(modal);
+
+        //         $("#myModal").modal("show");
+        //     };
+
+
+
+        //     diver.appendChild(button);
+
+        //     $(function () {
+        //         $("table").DataTable();
+        //     });
+
+        // };
+
+
+        // const getdata = async () => {
+
+
+        //     const diver = document.getElementById("hero");
+
+        //     var table = document.createElement("table");
+        //     table.classList.add("table", "table-striped", "table-hover");
+
+        //     var head = document.createElement("thead");
+        //     var headerRow = document.createElement("tr");
+        //     var body = document.createElement("tbody");
+
+        //     var headerCell1 = document.createElement("th");
+        //     headerCell1.textContent = "Column 1";
+
+        //     var headerCell2 = document.createElement("th");
+        //     headerCell2.textContent = "Column 2";
+
+        //     var headerCell3 = document.createElement("th");
+        //     headerCell3.textContent = "Column 3";
+
+        //     var headerCell4 = document.createElement("th");
+        //     headerCell4.textContent = "Column 4";
+
+        //     headerRow.appendChild(headerCell1);
+        //     headerRow.appendChild(headerCell2);
+        //     headerRow.appendChild(headerCell3);
+        //     headerRow.appendChild(headerCell4);
+        //     head.appendChild(headerRow);
+
+        //     table.appendChild(head);
+
+        //     table.setAttribute("id", "Mytable");
+
+        //     for (var i = 1; i <= 3; i++) {
+        //         var row = document.createElement("tr");
+
+        //         var cell1 = document.createElement("td");
+        //         cell1.textContent = "Item " + ((i - 1) * 3 + 1);
+
+        //         var cell2 = document.createElement("td");
+        //         cell2.textContent = Math.floor(Math.random() * 10) + 1;
+
+        //         var cell3 = document.createElement("td");
+        //         var select = document.createElement("select");
+        //         for (var j = 0; j <= 5; j++) {
+        //             var option = document.createElement("option");
+        //             option.value = j;
+        //             option.text = j;
+        //             select.appendChild(option);
+        //         }
+        //         cell3.appendChild(select);
+
+        //         var cell4 = document.createElement("td");
+        //         const boton = document.createElement("button");
+        //         boton.classList.add("btn", "btn-info");
+        //         boton.innerHTML = "hello click me..";
+        //         boton.onclick = function () {
+        //             EditData(this);
+        //         };
+        //         cell4.appendChild(boton);
+
+        //         row.appendChild(cell1);
+        //         row.appendChild(cell2);
+        //         row.appendChild(cell3);
+        //         row.appendChild(cell4);
+        //         body.appendChild(row)
+        //     }
+        //     table.appendChild(body);
+
+        //     function EditData(button) {
+        //         var row = button.parentNode.parentNode;
+        //         var name = row.cells[0].textContent;
+        //         var value = row.cells[2].getElementsByTagName("select")[0].value;
+        //         alert("Hey congrats " + name + ". You selected " + value);
+        //     }
+
+        //     diver.appendChild(table);
+
+        //     $(function () {
+        //         $('#Mytable').DataTable();
+        //     });
+
+        // }
+
+
+//          const getdata = async () => {
+//   const diver = document.getElementById("hero");
+
+//   const table = document.createElement("table");
+//   table.classList.add("table", "table-striped", "table-hover");
+
+//   const head = document.createElement("thead");
+//   const headerRow = document.createElement("tr");
+
+//   const headerCell1 = document.createElement("th");
+//   headerCell1.textContent = "Name";
+
+//   const headerCell2 = document.createElement("th");
+//   headerCell2.textContent = "Selected Value";
+
+//   headerRow.appendChild(headerCell1);
+//   headerRow.appendChild(headerCell2);
+//   head.appendChild(headerRow);
+//   table.appendChild(head);
+
+//   const body = document.createElement("tbody");
+
+//   for (let i = 1; i <= 5; i++) {
+//     const row = document.createElement("tr");
+
+//     const cell1 = document.createElement("td");
+//     cell1.textContent = "Name " + i;
+
+//     const cell2 = document.createElement("td");
+
+//     const select = document.createElement("select");
+//     select.classList.add("form-control");
+
+//     for (let j = 1; j <= 5; j++) {
+//   const option = document.createElement("option");
+//   option.value = j;
+//   option.textContent = j;
+//   select.appendChild(option);
+// }
+
+//     cell2.appendChild(select);
+
+//     row.appendChild(cell1);
+//     row.appendChild(cell2);
+
+//     body.appendChild(row);
+//   }
+
+//   table.appendChild(body);
+//   diver.appendChild(table);
+
+//   const button = document.createElement("button");
+//   button.classList.add("btn", "btn-primary");
+//   button.textContent = "Submit";
+//   button.onclick = function () {
+//     const modal = document.createElement("div");
+//     modal.classList.add("modal", "fade");
+//     modal.id = "myModal";
+
+//     const modalDialog = document.createElement("div");
+//     modalDialog.classList.add("modal-dialog");
+
+//     const modalContent = document.createElement("div");
+//     modalContent.classList.add("modal-content");
+
+//     const modalHeader = document.createElement("div");
+//     modalHeader.classList.add("modal-header");
+
+//     const modalTitle = document.createElement("h4");
+//     modalTitle.classList.add("modal-title");
+//     modalTitle.textContent = "Selected Values";
+
+//     const modalBody = document.createElement("div");
+//     modalBody.classList.add("modal-body");
+
+//     const modalFooter = document.createElement("div");
+//     modalFooter.classList.add("modal-footer");
+
+//     const closeButton = document.createElement("button");
+//     closeButton.classList.add("btn", "btn-secondary");
+//     closeButton.textContent = "Close";
+//     closeButton.setAttribute("data-dismiss", "modal");
+
+//     const names = document.querySelectorAll("td:first-child");
+//     const values = document.querySelectorAll("select");
+
+//     let modalContentText = "";
+
+//     for (let i = 0; i < names.length; i++) {
+//       modalContentText += `${names[i].textContent}: ${values[i].value}\n`;
+//     }
+
+//     const modalText = document.createTextNode(modalContentText);
+
+//     modalHeader.appendChild(modalTitle);
+//     modalBody.appendChild(modalText);
+//     modalFooter.appendChild(closeButton);
+//     modalContent.appendChild(modalHeader);
+//     modalContent.appendChild(modalBody);
+//     modalContent.appendChild(modalFooter);
+//     modalDialog.appendChild(modalContent);
+//     modal.appendChild(modalDialog);
+
+//     diver.appendChild(modal);
+
+//     $("#myModal").modal("show");
+//   };
+
+//   diver.appendChild(button);
+
+//   $(function () {
+//     $("table").DataTable();
+//   });
+// };
+
+
+//     const getdata = async () => {
+//   const names = ["Name 1", "Name 2", "Name 3", "Name 4", "Name 5","Name 2", "Name 3", "Name 4", "Name 5"];
+
+//   const modal = document.createElement("div");
+//   modal.classList.add("modal", "fade");
+//   modal.setAttribute("id", "myModal");
+
+//   const modalDialog = document.createElement("div");
+//   modalDialog.classList.add("modal-dialog", "modal-lg");
+//   modal.appendChild(modalDialog);
+
+//   const modalContent = document.createElement("div");
+//   modalContent.classList.add("modal-content");
+//   modalDialog.appendChild(modalContent);
+
+//   const modalHeader = document.createElement("div");
+//   modalHeader.classList.add("modal-header");
+//   modalContent.appendChild(modalHeader);
+
+//   const modalTitle = document.createElement("h4");
+//   modalTitle.classList.add("modal-title");
+//   modalTitle.textContent = "Selected Values";
+//   modalHeader.appendChild(modalTitle);
+
+//   const modalBody = document.createElement("div");
+//   modalBody.classList.add("modal-body");
+//   modalContent.appendChild(modalBody);
+
+//   const table = document.createElement("table");
+//   table.classList.add("table", "table-striped", "table-hover");
+
+//   const thead = document.createElement("thead");
+//   const headerRow = document.createElement("tr");
+//   const headerCell1 = document.createElement("th");
+//   headerCell1.textContent = "Name";
+//   const headerCell2 = document.createElement("th");
+//   headerCell2.textContent = "Selected Value";
+//   headerRow.appendChild(headerCell1);
+//   headerRow.appendChild(headerCell2);
+//   thead.appendChild(headerRow);
+//   table.appendChild(thead);
+
+//   const tbody = document.createElement("tbody");
+//   for (let i = 0; i < names.length; i++) {
+//     const row = document.createElement("tr");
+//     const cell1 = document.createElement("td");
+//     cell1.textContent = names[i];
+//     const cell2 = document.createElement("td");
+//     const select = document.createElement("select");
+//     select.classList.add("form-select");
+//     for (let j = 0; j <= 5; j++) {
+//       const option = document.createElement("option");
+//       option.value = j;
+//       option.textContent = j;
+//       select.appendChild(option);
+//     }
+//     cell2.appendChild(select);
+//     row.appendChild(cell1);
+//     row.appendChild(cell2);
+//     tbody.appendChild(row);
+//   }
+//   table.appendChild(tbody);
+//   modalBody.appendChild(table);
+
+//   const modalFooter = document.createElement("div");
+//   modalFooter.classList.add("modal-footer");
+//   modalContent.appendChild(modalFooter);
+
+//   const submitBtn = document.createElement("button");
+//   submitBtn.classList.add("btn", "btn-primary");
+//   submitBtn.textContent = "Submit";
+//   submitBtn.addEventListener("click", () => {
+//     let message = "";
+//     for (let i = 0; i < names.length; i++) {
+//       const select = tbody.children[i].children[1].children[0];
+//       message += `${names[i]}: ${select.value} `;
+//       if (i < names.length - 1) {
+//         message += "\n";
+//       }
+//     }
+//     alert(message);
+//     $("#myModal").modal("hide");
+//   });
+//   modalFooter.appendChild(submitBtn);
+
+//   document.body.appendChild(modal);
+//   $("#myModal").modal("show");
+// };
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+
+
+</html>

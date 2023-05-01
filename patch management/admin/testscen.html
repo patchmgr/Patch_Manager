@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>File Upload Example</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <style>
+    /* Style the progress bar container */
+    .progress {
+      height: 30px;
+      margin-bottom: 20px;
+    }
+    /* Style the progress bar */
+    .progress-bar {
+      height: 30px;
+      line-height: 30px;
+      font-size: 14px;
+      text-align: center;
+      background-color: #007bff;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>File Upload Example</h1>
+    <form action="upload.php" method="post" enctype="multipart/form-data">
+      <!-- File upload input -->
+      <div class="mb-3">
+        <label for="fileToUpload" class="form-label">Select a file to upload:</label>
+        <input type="file" class="form-control" name="fileToUpload" id="fileToUpload">
+      </div>
+      <!-- Progress bar -->
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+          0%
+        </div>
+      </div>
+      <!-- Upload button -->
+      <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+  </div>
+  <!-- Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script>
+    // Get the progress bar element
+    var progressBar = document.querySelector('.progress-bar');
+    // Listen for the upload progress event
+    document.querySelector('form').addEventListener('progress', function(event) {
+      // Calculate the upload percentage
+      var percent = Math.round((event.loaded / event.total) * 100);
+      // Update the progress bar text and width
+      progressBar.style.width = percent + '%';
+      progressBar.setAttribute('aria-valuenow', percent);
+      progressBar.innerText = percent + '%';
+    });
+    // Listen for the upload complete event
+    document.querySelector('form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      // Show the alert message after the upload is complete
+      var alert = document.createElement('div');
+      alert.classList.add('alert', 'alert-success');
+      alert.innerText = 'File uploaded successfully!';
+      document.querySelector('.container').appendChild(alert);
+    });
+  </script>
+</body>
+</html>

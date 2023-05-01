@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Upload Card Example</title>
+	<!-- Add Bootstrap CDN links -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<body>
+
+	<!-- Add Upload button -->
+	<button id="uploadBtn" class="btn btn-secondary">Upload</button>
+
+	<!-- Add JavaScript to dynamically create card -->
+	<script>
+		$(document).ready(function() {
+			// Define card content variables
+			var requestID = "[insert ID]";
+			var patchDetails = "[insert patch details here]";
+			var features = "[insert features here]";
+			var par = "[insert software here]";
+			var downloadURL = "#";
+
+			// Create card elements
+			var card = document.createElement('div');
+			card.classList.add('card');
+
+			var cardHeader = document.createElement('div');
+			cardHeader.classList.add('card-header');
+
+			var cardTitle = document.createElement('h2');
+			cardTitle.innerText = "Request ID: " + requestID;
+
+			var cardBody = document.createElement('div');
+			cardBody.classList.add('card-body');
+
+			var patchTitle = document.createElement('h3');
+			patchTitle.classList.add('card-title');
+			patchTitle.innerText = "Patch Details:";
+
+			var patchDetailsText = document.createElement('p');
+			patchDetailsText.classList.add('card-text');
+			patchDetailsText.innerText = patchDetails;
+
+			var pa = document.createElement('h3');
+			pa.classList.add('card-title');
+			pa.innerText = "Software:";
+
+			var pat1 = document.createElement('p');
+			pat1.classList.add('card-text');
+			pat1.innerText = pa;
+
+			var featuresTitle = document.createElement('h3');
+			featuresTitle.classList.add('card-title');
+			featuresTitle.innerText = "Features:";
+
+			var featuresText = document.createElement('p');
+			featuresText.classList.add('card-text');
+			featuresText.innerText = features;
+
+			var downloadBtn = document.createElement('a');
+			downloadBtn.classList.add('btn', 'btn-primary');
+			downloadBtn.href = downloadURL;
+			downloadBtn.innerText = "Software Download";
+
+			var uploadBtn = document.createElement('button');
+			uploadBtn.classList.add('btn', 'btn-success', 'float-right');
+			uploadBtn.innerText = "Upload";
+
+			// Append elements to card and card body
+		
+			// Append elements to card and card body
+			cardHeader.appendChild(cardTitle);
+
+			cardBody.appendChild(patchTitle);
+			cardBody.appendChild(patchDetailsText);
+			cardBody.appendChild(pa);
+			cardBody.appendChild(pat1);
+			cardBody.appendChild(featuresTitle);
+			cardBody.appendChild(featuresText);
+			cardBody.appendChild(downloadBtn);
+			cardBody.appendChild(uploadBtn);
+
+			card.appendChild(cardHeader);
+			card.appendChild(cardBody);
+
+			// Add card to document
+			$('#uploadBtn').click(function() {
+				$('#cardContainer').append(card);
+			});
+		});
+	</script>
+
+	<!-- Add container for cards -->
+	<div id="cardContainer" class="container my-3"></div>
+
+</body>
+</html>

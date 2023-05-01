@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="addInputBtn">Add a feature</button>
+    <div id="inputsContainer"></div>
+    <button id="logDataBtn">Log Data</button>
+
+
+    <script>
+        let inputIndex = 0; // start with index 0
+        const inputsContainer = document.getElementById("inputsContainer");
+        const addInputBtn = document.getElementById("addInputBtn");
+        const logDataBtn = document.getElementById("logDataBtn");
+        const inputData = {};
+
+        addInputBtn.addEventListener("click", () => {
+        const newRow = document.createElement("div");
+
+        const newInput = document.createElement("input");
+        newInput.type = "text";
+        newInput.name = `input-${inputIndex}`;
+        newInput.placeholder = `Input ${inputIndex}`;
+        newRow.appendChild(newInput);
+
+
+        inputsContainer.appendChild(newRow);
+
+        inputIndex++;
+        });
+        let array=[];
+        logDataBtn.addEventListener("click", () => {
+        const inputs = document.querySelectorAll("input[type=text]");
+        console.log(inputs)
+        inputs.forEach((input) => {
+            inputData[input.name] = input.value;
+            array.push(input.value);
+        });
+
+        console.log(array);
+});
+
+
+    </script>    
+</body>
+
+</html>

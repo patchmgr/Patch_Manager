@@ -1,0 +1,239 @@
+	<!-- <div class="container text-center" id="myList"></div> -->
+
+    // const CreateTable = async () =>  {
+//     const arrValue = new Array();
+
+//     // CREATE DYNAMIC TABLE.
+
+
+//     var table = document.createElement('table');
+
+//     // // SET THE TABLE ID. 
+//     // // WE WOULD NEED THE ID TO TRAVERSE AND EXTRACT DATA FROM THE TABLE.
+//     table.setAttribute('id', 'empTable');
+
+
+//     var arrHead = new Array();
+//     arrHead = ['Patch name', 'Version', 'Platform','features', 'Verify', 'status'];
+
+//     const ids = await contract.methods.dataarray().call();
+//     for (var i = 0; i < ids.length; i++) {
+//         const vals = await contract.methods.details(ids[i]).call();
+//         let e3= document.createTextNode("vals[2");
+//         let e4=document.createTextNode(vals[3]);
+//         let e5=document.createTextNode(vals[4]);
+//         let e6=document.createTextNode(vals[5]);
+//         arrValue.push([e3, e4, e5,e6,'0','0']);
+//         console.log(vals);
+//     }
+
+//     var tr = table.insertRow(-1);
+
+//     for (var h = 0; h < arrHead.length; h++) {
+//         var th = document.createElement('th');              // TABLE HEADER.
+//         th.innerHTML = arrHead[h];
+//         tr.appendChild(th);
+//     }
+
+//     for (var c = 0; c <= arrValue.length - 1; c++) {
+//         tr = table.insertRow(-1);
+
+//         for (var j = 0; j < arrHead.length; j++) {
+//             var td = document.createElement('td');          // TABLE DEFINITION.
+//             td = tr.insertCell(-1);
+//             td.innerHTML = arrValue[c][j];                  // ADD VALUES TO EACH CELL.
+//         }
+//     }
+//     table.classList.add("table","table-striped","table-hover");
+
+//     // FINALLY ADD THE NEWLY CREATED TABLE AND BUTTON TO THE BODY.
+//     // document.getElementById("myList").innerHTML=document.getElementById(table).innerHTML;
+//     // document.body.appendChild(table);
+//     document.getElementById("myList").appendChild(table);
+
+// }
+
+
+
+// var table = $('#myTable').DataTable({
+//     // Define the table columns
+//     columns: [
+//     { title: "Name", data: "name" },
+//     { title: "Age", data: "age" },
+//     { title: "Action", data: null, render: function(data, type, row, meta) {
+//         return '<button class="btn btn-primary accept-btn">Accept</button>';
+//     }}
+//     ]
+// });
+
+// // Add a click event listener to the Accept button
+// $('#myTable tbody').on('click', '.accept-btn', function() {
+//     // Get the data for the clicked row
+//     var row = table.row($(this).closest('tr')).data();
+    
+//     // Display an alert message
+//     alert("Accepted: " + row.name);
+// });
+
+// // Add data to the table
+// var data = [
+//     { name: "John", age: 30 },
+//     { name: "Jane", age: 25 },
+//     { name: "Bob", age: 40 }
+// ];
+
+// table.rows.add(data).draw();
+
+// ({
+    //     // Define the table columns
+    //     columns: [
+        //         { title: "Patch name", data: "name" },
+        //         { title: "Patch version", data: "version" },
+        //         { title: "Patch platform", data: "pf" },
+        //         { title: "Patch features", data: "features" },
+        //         {
+            //             title: "Download",
+            //             data: null,
+            //             render: function(data, type, row, meta) {
+                //                 var id_down = 'accept-btn-down' + meta.row;
+                //                 return '<input type="button" class="btn btn-primary accept-btn-down" id="' + id_down + '" value="download">';
+                //             }
+                //         },
+                //         {
+//             title: "verification",
+//             data: null,
+//             render: function(data, type, row, meta) {
+    //                 var buttonId = 'accept-btn-' + meta.row;
+    //                 return '<input type="button" class="btn btn-primary accept-btn" id="' + buttonId + '" value="verify">';
+    //             }
+    //         }
+    //     ]
+    // });
+    
+    // $('#myTable tbody').on('click', '.accept-btn', function() {
+        //     var row = table.row($(this).closest('tr')).data();
+        //     var buttonId = $(this).attr('id');
+        //     var result = confirm("Are you sure to verify this patch " + row.name + "?");
+        //     console.log(result);
+        //     if (result) {
+            
+            //         $("#" + buttonId).prop("value", "verified");
+            //         $("#" + buttonId).prop("disabled", true);
+            //     } 
+            
+            //     else {
+                //         $("#" + buttonId).removeClass("btn-primary").addClass("btn-danger");
+                //         $("#" + buttonId).prop("value", "verification failed");
+                //         $("#" + buttonId).prop("disabled", true);
+                //     }
+                // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                const getdata = async () => {
+  const diver = document.getElementById("hero");
+
+  const table = document.createElement("table");
+  table.classList.add("table", "table-striped", "table-hover");
+
+  const head = document.createElement("thead");
+  const headerRow = document.createElement("tr");
+  const body = document.createElement("tbody");
+
+  const headerCell1 = document.createElement("th");
+  headerCell1.textContent = "Column 1";
+
+  const headerCell2 = document.createElement("th");
+  headerCell2.textContent = "Column 2";
+
+  const headerCell3 = document.createElement("th");
+  headerCell3.textContent = "Column 3";
+
+  headerRow.appendChild(headerCell1);
+  headerRow.appendChild(headerCell2);
+  headerRow.appendChild(headerCell3);
+  head.appendChild(headerRow);
+
+  table.appendChild(head);
+
+  table.setAttribute("id", "Mytable");
+
+  const names = ["Alice", "Bob", "Charlie", "Dave", "Emily"];
+
+  for (let i = 0; i < names.length; i++) {
+    const row = document.createElement("tr");
+
+    const cell1 = document.createElement("td");
+    cell1.textContent = names[i];
+
+    const cell2 = document.createElement("td");
+    cell2.textContent = Math.floor(Math.random() * 10) + 1;
+
+    const select = document.createElement("select");
+    select.classList.add("form-select");
+    select.innerHTML = `
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    `;
+    const cell3 = document.createElement("td");
+    cell3.appendChild(select);
+
+    row.appendChild(cell1);
+    row.appendChild(cell2);
+    row.appendChild(cell3);
+    body.appendChild(row);
+  }
+
+  table.appendChild(body);
+
+  const submitButton = document.createElement("button");
+  submitButton.classList.add("btn", "btn-primary");
+  submitButton.textContent = "Submit";
+  submitButton.onclick = () => {
+    const selectedName = table.querySelector("tr.selected td:first-child").textContent;
+    const selectedValue = table.querySelector("tr.selected select").value;
+    alert(`name: ${selectedName} and selected value: ${selectedValue}`);
+  };
+  const row = document.createElement("tr");
+  const cell = document.createElement("td");
+  cell.setAttribute("colspan", 3);
+  cell.classList.add("text-center");
+  cell.appendChild(submitButton);
+  row.appendChild(cell);
+  body.appendChild(row);
+
+  diver.appendChild(table);
+
+  $(function () {
+    $("#Mytable").DataTable();
+  });
+
+  table.querySelectorAll("tbody tr").forEach((row) => {
+    row.addEventListener("click", () => {
+      if (table.querySelector("tr.selected")) {
+        table.querySelector("tr.selected").classList.remove("selected");
+      }
+      row.classList.add("selected");
+    });
+  });
+};
