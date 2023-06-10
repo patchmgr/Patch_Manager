@@ -11,6 +11,19 @@ const connectMetamask = async () => {
 const connectContract = async () => {
     const ABI =[
         {
+            "inputs": [],
+            "name": "AllHashes",
+            "outputs": [
+                {
+                    "internalType": "bytes32[]",
+                    "name": "",
+                    "type": "bytes32[]"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
             "inputs": [
                 {
                     "internalType": "string[]",
@@ -142,6 +155,11 @@ const connectContract = async () => {
                     "internalType": "string",
                     "name": "bug_status",
                     "type": "string"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "bug_lbl_time",
+                    "type": "uint256"
                 }
             ],
             "stateMutability": "view",
@@ -435,6 +453,11 @@ const connectContract = async () => {
                     "internalType": "string",
                     "name": "feature_status",
                     "type": "string"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "feature_lbl_time",
+                    "type": "uint256"
                 }
             ],
             "stateMutability": "view",
@@ -666,11 +689,29 @@ const connectContract = async () => {
                     "internalType": "bytes",
                     "name": "file",
                     "type": "bytes"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "bugid",
+                    "type": "uint256"
                 }
             ],
             "name": "register",
             "outputs": [],
             "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "verificationstatus",
+            "outputs": [
+                {
+                    "internalType": "uint256[]",
+                    "name": "",
+                    "type": "uint256[]"
+                }
+            ],
+            "stateMutability": "view",
             "type": "function"
         },
         {
@@ -692,7 +733,7 @@ const connectContract = async () => {
             "type": "function"
         }
     ];
-    const Address = "0x405bcD6F5ca070F55B073aBB02C475f9c8044f06";
+    const Address = "0xE98FE6f69B361A9878E62F48e0b9F3427cda29a2";
     window.web3 = await new Web3(window.ethereum);
     window.contract = await new window.web3.eth.Contract(ABI, Address);
     CreateTabl();
