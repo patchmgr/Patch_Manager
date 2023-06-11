@@ -744,6 +744,7 @@ const devrequest = async () => {
     const e2 = document.getElementById("desc").value;
     const e3 = document.getElementById("psft").value;
     const e4 = document.getElementById("ftres").value;
+    const e5 = document.getElementById("bid").value;
     const fileinput = document.getElementById("patchfile");
     const file = fileinput.files[0];
     const reader = new FileReader();
@@ -752,13 +753,14 @@ const devrequest = async () => {
     reader.onload = async () => {
         const fileData = new Uint8Array(reader.result);
         console.log(fileData);
-        await window.contract.methods.register(e1, JSON.stringify(e2), e3, JSON.stringify(e4),fileData).send({ from: account });
+        await window.contract.methods.register(e1, JSON.stringify(e2), e3, JSON.stringify(e4),fileData,e5).send({ from: account });
     }
 
     console.log(e1); // check value of e1
     console.log(e2); // check value of e2
     console.log(e3); // check value of e3
     console.log(e4); // check value of e4
+    console.log(e5); // check value of e5
     // console.log("helo")
 }
 

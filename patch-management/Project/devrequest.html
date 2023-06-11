@@ -17,10 +17,10 @@
 
 
 	<!-- FilePond stylesheet -->
-<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" />
+	<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" />
 
-<!-- FilePond JavaScript -->
-<script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+	<!-- FilePond JavaScript -->
+	<script src="https://unpkg.com/filepond/dist/filepond.js"></script>
 
 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -41,17 +41,19 @@
 	<body>
 
 		<!-- nav bar -->
-		<nav class="navbar navbar-expand-lg  fixed-top navbar-light " id="mainNav" style="background-color: aquamarine;"> 
+		<nav class="navbar navbar-expand-lg  fixed-top navbar-light " id="mainNav"
+			style="background-color: aquamarine;">
 			<div class="container-fluid">
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
-					aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span
-						class="navbar-toggler-icon"></span></button>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+					data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+					aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 				<div class="collapse navbar-collapse" id="navbarResponsive">
 					<ul class="nav nav-pills me-auto mb-2 mb-lg-0 w-100" id="pills-tab" role="tablist">
 						<li class="nav-item" role="presentation">
 							<button class="nav-link " id="pills-profile-tab" data-bs-toggle="pill"
 								data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile"
-								aria-selected="false" onclick="window.open('userdownload.html','_self');">End User</button>
+								aria-selected="false" onclick="window.open('userdownload.html','_self');">End
+								User</button>
 						</li>
 						<li class="nav-item" role="presentation">
 							<button class="nav-link " id="pills-contact-tab" data-bs-toggle="pill"
@@ -66,15 +68,17 @@
 						<li class="nav-item" role="presentation">
 							<button class="nav-link active" id="pills-contact-tab" data-bs-toggle="pill"
 								data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact"
-								aria-selected="false" onclick="window.open('devrequest.html','_self');">Developer</button>
+								aria-selected="false"
+								onclick="window.open('devrequest.html','_self');">Developer</button>
 						</li>
 						<li class="nav-item" role="presentation">
 							<button class="nav-link " id="pills-contact-tab" data-bs-toggle="pill"
 								data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact"
-								aria-selected="false" onclick="window.open('patchverify.html','_self');">Verifier (qc)</button>
+								aria-selected="false" onclick="window.open('patchverify.html','_self');">Verifier
+								(qc)</button>
 						</li>
 					</ul>
-	
+
 				</div>
 			</div>
 		</nav>
@@ -120,15 +124,19 @@
 						<h5>enter patch name</h3>
 							<input type="text" id="pname" class="form-control">
 							<h5>patch description</h3>
-							<input  type="text" class="form-control"  id="desc" readonly></input>
+							<input type="text" class="form-control" id="desc" readonly></input>
 							<h5>Software</h3>
-							<input  type="text" class="form-control"  id="psft" readonly></input>
+							<input type="text" class="form-control" id="psft" readonly></input>
 							<h5>patch features</h3>
-							<input  type="text" class="form-control"  id="ftres" readonly></input>
+							<input type="text" class="form-control" id="ftres" readonly></input>
 							<h5>patch no</h3>
 							<p id="totno">1</p>
+							<h5>bug id</h3>
+							<input type="text" class="form-control" id="bid" readonly></input>
+							<br><br>
+
 							<button class="btn btn-bd-primary float-end"
-							onclick="devrequest()">Register</button>
+								onclick="devrequest()">Register</button>
 							<input type="file" id="patchfile">
 					</div>
 
@@ -154,7 +162,7 @@
 					tot = result
 					console.log(tot)
 
-					for (let i = 0; i < result-1; i++) {
+					for (let i = 0; i < result - 1; i++) {
 						var features = "[insert features here]";
 						let tope;
 						var v = window.contract.methods.fall(i).call().then((result1) => {
@@ -218,18 +226,25 @@
 
 
 
-							uploadBtn.onclick = function () {
-								// Get the patch details from the card
-								const patchDetails = patchDetailsText.innerText;
-								const software = pat1.innerText;
-								const features = featuresText.innerText;
+							function handleUploadClick(index) {
+								uploadBtn.onclick = function () {
+									// Get the patch details from the card
+									const patchDetails = patchDetailsText.innerText;
+									const software = pat1.innerText;
+									const features = featuresText.innerText;
+									const bugid = index;
 
-								// Populate the modal with the patch details
-								document.getElementById("desc").value = patchDetails;
-								document.getElementById("psft").value = software;
-								document.getElementById("ftres").value = features;
+									// Populate the modal with the patch details and bid value
+									document.getElementById("desc").value = patchDetails;
+									document.getElementById("psft").value = software;
+									document.getElementById("ftres").value = features;
+									document.getElementById("bid").value = bugid;
+									document.getElementById("totno").textContent = tot-1;
+								};
 							}
-							breaker=document.createElement("br")
+
+							handleUploadClick(i);
+							breaker = document.createElement("br")
 
 
 							// Append elements to card and card body
@@ -263,7 +278,7 @@
 
 
 
-			
+
 		</script>
 
 	</body>
