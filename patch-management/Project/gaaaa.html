@@ -16,108 +16,94 @@
     <div id="inputsContainer">
         <div class="inputRow">
             <input type="text" name="input-0" placeholder="Input 0">
-            <select class="dropdown" aria-label="Default select example">
-                <option selected>priority</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                
-            </select>
-            <button class="addButton btn btn-info">+</button>
+            <input type="text" name="input-0" placeholder="Input 0">
+            <button class="removeButton btn btn-danger">Remove</button>
+            <button class="addButton btn btn-info">Add</button>
         </div>
     </div>
-    <button id="logDataBtn">Log Data</button>
+    <button id="logDataBtn" type="submit">Log Data</button>
 
-    <style>
-        .inputRow {
-            margin-bottom: 10px;
-        }
-
-        .inputRow input {
-            margin-right: 10px;
-        }
-
-        .inputRow button {
-            margin-left: 10px;
-        }
-    </style>
-
-    <<script>
-        let inputIndex = 1; // start with index 1 (since we have one row already)
+    <script>
+        let inputIndex = 1; // start with index 0
         const inputsContainer = document.getElementById("inputsContainer");
         const logDataBtn = document.getElementById("logDataBtn");
         const inputData = [];
-    
+
         function addRow(e) {
             const currentRow = e.target.closest(".inputRow");
             const newRow = document.createElement("div");
             newRow.classList.add("inputRow");
-    
+
             const newInput = document.createElement("input");
             newInput.type = "text";
             newInput.name = `input-${inputIndex}`;
             newInput.placeholder = `Input ${inputIndex}`;
             newRow.appendChild(newInput);
-    
-            const newSelect = document.createElement("select");
-            newSelect.name = `select-${inputIndex}`;
-            newSelect.ariaLabel = "Priority";
-            const priorityLevels = ["1", "2", "3", "4", "5"];
-            priorityLevels.forEach((level) => {
-                const option = document.createElement("option");
-                option.value = level;
-                option.text = level;
-                newSelect.add(option);
-            });
-            newRow.appendChild(newSelect);
-    
-            const newButton = document.createElement("button");
-            newButton.classList.add("addButton");
-            newButton.classList.add("btn");
-            newButton.classList.add("btn-info");
-            newButton.innerHTML = "+";
-            newRow.appendChild(newButton);
-    
-            inputsContainer.insertBefore(newRow, currentRow.nextSibling);
-    
+
+            const newInput1 = document.createElement("input");
+            newInput1.type = "text";
+            newInput1.name = `input-${inputIndex}`;
+            newInput1.placeholder = `Input ${inputIndex}`;
+            newRow.appendChild(newInput1);
+
+            const newButtonRemove = document.createElement("button");
+            newButtonRemove.classList.add("release");
+            newButtonRemove.classList.add("btn");
+            newButtonRemove.classList.add("btn-danger");
+            newButtonRemove.innerHTML = "Remove";
+            newRow.appendChild(newButtonRemove);
+            inputsContainer.insertBefore(newRow, currentRow);
+
             inputIndex++;
         }
-    
+
         inputsContainer.addEventListener("click", (e) => {
             if (e.target.matches(".addButton")) {
                 addRow(e);
+            } 
+            else if (e.target.matches(".removeButton")) {
+                const currentRow = e.target.closest(".inputRow");
+                const previousRow = currentRow.previousElementSibling;
+                if (previousRow) {
+                    const previousInputs = previousRow.querySelectorAll('input[type="text"]');
+                    const currentInputs = currentRow.querySelectorAll('input[type="text"]');
+                    for (let i = 0; i < previousInputs.length; i++) {
+                        currentInputs[i].value = previousInputs[i].value;
+                    }
+                    inputsContainer.removeChild(previousRow);
+                }
+            }
+            else if (e.target.matches(".release")) {
+                const currentRow = e.target.closest(".inputRow");
+                if (inputIndex >= 1) {
+                    const previousRow = currentRow.previousElementSibling;
+                    if (previousRow) {
+                        const previousInputs = previousRow.querySelectorAll(
+                            'input[name^="input-"]'
+                        );
+                        const currentInputs = currentRow.querySelectorAll(
+                            'input[name^="input-"]'
+                        );
+                        previousInputs[0].value = currentInputs[0].value;
+                        previousInputs[1].value = currentInputs[1].value;
+                    }
+                    inputsContainer.removeChild(currentRow);
+                    inputIndex--;
+                }
             }
         });
 
-
-        let a=[];
         logDataBtn.addEventListener("click", () => {
-            // let a1=[];
+            let a = [];
             const inputs = document.querySelectorAll("input[type=text]");
-            const selects = document.querySelectorAll("select");
-            for(let i=0;i<inputs.length;i++){
-                // a1.push([inputs[i].value,selects[i].value]);
-                a.push([inputs[i].value,selects[i].value]);
+            for (let i = 0; i < inputs.length; i += 2) {
+                const name = inputs[i].value;
+                const dept = inputs[i + 1].value;
+                a.push({ name, dept });
             }
-            // inputs.forEach((input) => {
-            //     a1.push(inputalue);
-            // });
-            // selects.forEach((select) => {
-            //     const selectName = select.name;
-            //     const selectValue = select.value;
-            //     // inputData.push({ selectName: selectValue });
-            //     a.push(selectValue);
-            // });
-            
-            // array.push(a);
-            // inputData.push({ inputName: inputValue, selectName: selectValue });
             console.log(a);
         });
-        // console.log(a[]);
-
-    
     </script>
 </body>
+
 </html>

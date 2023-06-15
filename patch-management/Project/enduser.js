@@ -794,34 +794,6 @@ $('#myTable tbody').on('click', '.accept-btn',async function () {
 });
 
 
-// $('#myTable tbody').on('click', '.accept-btn', async function () {
-//     const row = table.row($(this).closest('tr')).data();
-//     const cid = '';
-
-//     await downloadFile(cid);
-// });
-
-
-// async function downloadFile(cid) {
-//     const ipfs = window.IpfsHttpClient({
-//         host: 'ipfs.infura.io',
-//         port: 5001,
-//         protocol: 'https'
-//     });
-
-//     const files = await ipfs.get(cid);
-//     const fileBlob = files[0].content;
-
-//     const fileUrl = URL.createObjectURL(fileBlob);
-//     const downloadLink = document.createElement('a');
-//     downloadLink.href = fileUrl;
-//     downloadLink.download = `${cid}.pdf`;
-//     downloadLink.click();
-// }
-
-
-
-
 
 var arrValue = new Array();
 const CreateTabl = async () => {
